@@ -1,4 +1,4 @@
-service: notes-app-api
+service: points-api
 
 # Create an optimized package for our functions
 package:
@@ -14,18 +14,17 @@ custom:
   # commands. Or falls back to what we have set in the provider section.
   stage: ${opt:stage, self:provider.stage}
   # Name of the SST app that's deploying our infrastructure
-  sstApp: ${self:custom.stage}-notes-infra
+  sstApp: ${self:custom.stage}-points-infra
 
 provider:
   name: aws
   runtime: nodejs12.x
   stage: dev
-  region: us-east-1
+  region: ap-northeast-2
 
   # These environment variables are made available to our functions
   # under process.env.
   environment:
-    stripeSecretKey: ${env:STRIPE_SECRET_KEY}
     tableName: !ImportValue '${self:custom.sstApp}-TableName'
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
@@ -54,7 +53,7 @@ functions:
     handler: create.main
     events:
       - http:
-          path: notes
+          path: points
           method: post
           cors: true
           authorizer: aws_iam
@@ -66,7 +65,7 @@ functions:
     handler: get.main
     events:
       - http:
-          path: notes/{id}
+          path: balance
           method: get
           cors: true
           authorizer: aws_iam
@@ -78,7 +77,7 @@ functions:
     handler: list.main
     events:
       - http:
-          path: notes
+          path: details
           method: get
           cors: true
           authorizer: aws_iam
@@ -90,20 +89,8 @@ functions:
     handler: update.main
     events:
       - http:
-          path: notes/{id}
+          path: balance
           method: put
-          cors: true
-          authorizer: aws_iam
-
-  delete:
-    # Defines an HTTP API endpoint that calls the main function in delete.js
-    # - path: url path is /notes/{id}
-    # - method: DELETE request
-    handler: delete.main
-    events:
-      - http:
-          path: notes/{id}
-          method: delete
           cors: true
           authorizer: aws_iam
 
