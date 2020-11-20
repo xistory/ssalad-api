@@ -12,10 +12,11 @@ export const main = handler(async (event, context) => {
     },
     // 'UpdateExpression' defines the attributes to be updated
     // 'ExpressionAttributeValues' defines the value in the update expression
-    UpdateExpression: "SET cash = :cash, point = :point",
+    UpdateExpression: "SET cash = :cash, point = :point, accumPoint = :accumPoint",
     ExpressionAttributeValues: {
-      ":cash": data.cash || null,
-      ":point": data.point || null,
+        ":cash": data.cash,
+        ":point": data.point,
+        ":accumPoint": data.accumPoint,
     },
     // 'ReturnValues' specifies if and how to return the item's attributes,
     // where ALL_NEW returns all attributes of the item after the update; you
